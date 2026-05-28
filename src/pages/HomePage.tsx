@@ -1,18 +1,27 @@
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useUser } from '../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-    const [isLoggedIn] = useState(false);
+    const { isError, isLoading, user } = useUser();
+    const navigate = useNavigate();
 
     const login = () => {
-        if (isLoggedIn) {
-            window.location.href = 'http://localhost:3000/profile';
+        if(isLoading) return;
+
+        if (user) {
+            navigate('/profile');
             return;
         }else{
             window.location.href = 'http://localhost:3000/auth/github';
             return;
         }
     }
+
+    useEffect(() => {
+        console.log(user)
+    }, [user])
 
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-black flex items-center justify-center">
@@ -30,12 +39,12 @@ const HomePage = () => {
                 <button
                     onClick={login}
                     className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                        isLoggedIn
+                        user
                             ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
                     }`}
                 >
-                    {isLoggedIn ? 'Continue to Profile' : 'Login with GitHub'}
+                    {user ? 'Continue to Profile' : 'Login with GitHub'}
                 </button>
 
                 

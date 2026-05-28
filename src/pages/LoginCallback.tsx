@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGetCurrentUserQuery } from "../services/auth-service";
 import TokenStorageService from "../services/local-storage";
 
@@ -7,6 +7,7 @@ const LoginCallback = () => {
   const [searchParams] = useSearchParams();
   const tokenFromUrl = searchParams.get("token");
   const [enabled, setEnabled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (tokenFromUrl) {
@@ -18,6 +19,11 @@ const LoginCallback = () => {
   const {data, isLoading, error} = useGetCurrentUserQuery(undefined, {
     skip: !enabled,
   });
+
+  const handleNavigate = () => {
+    navigate("/profile");
+    return;
+  }
 
   if (error) {
     return <p>Something went wrong</p>;
@@ -66,7 +72,7 @@ const LoginCallback = () => {
               Welcome {data.user.username}
             </p>
 
-            <button className="mt-5 px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all">
+            <button onClick={handleNavigate} className="mt-5 px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all">
               Continue to Profile
             </button>
           </>

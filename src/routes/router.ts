@@ -3,6 +3,7 @@ import { createElement } from "react";
 import HomePage from "../pages/HomePage";
 import LoginCallback from "../pages/LoginCallback";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Profile from "../pages/Profile";
 
 const router = createBrowserRouter([
     {
@@ -15,7 +16,12 @@ const router = createBrowserRouter([
     },
     {
         element: createElement(ProtectedRoute),
-        children: []
+        children: [
+            {
+                path: "/profile",
+                element: createElement(Profile),
+            }
+        ]
     }
 ]);
 
