@@ -7,3 +7,8 @@ export interface UserState {
     avatarURL: string;
     isActive: boolean;
 }
+
+export type GetCurrentUserResponse = {
+    user: UserState;
+    token: string;
+}

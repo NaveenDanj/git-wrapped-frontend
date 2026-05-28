@@ -2,7 +2,17 @@
 import { useState } from 'react';
 
 const HomePage = () => {
-    const [isLoggedIn] = useState(true);
+    const [isLoggedIn] = useState(false);
+
+    const login = () => {
+        if (isLoggedIn) {
+            window.location.href = 'http://localhost:3000/profile';
+            return;
+        }else{
+            window.location.href = 'http://localhost:3000/auth/github';
+            return;
+        }
+    }
 
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-black flex items-center justify-center">
@@ -17,8 +27,8 @@ const HomePage = () => {
                     </p>
                 </div>
 
-                
                 <button
+                    onClick={login}
                     className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${
                         isLoggedIn
                             ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
