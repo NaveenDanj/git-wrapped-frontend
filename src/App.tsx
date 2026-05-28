@@ -1,16 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import LoginCallback from './pages/LoginCallback'
+import { RouterProvider } from 'react-router-dom'
+import router from './routes/router.ts'
 
 function App() {
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/callback' element={<LoginCallback />} />
-      </Routes>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   )
 }
 
