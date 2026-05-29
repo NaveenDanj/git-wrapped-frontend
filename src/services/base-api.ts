@@ -5,7 +5,7 @@ export const baseApi = createApi({
     reducerPath: 'baseApi',
 
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000',
+        baseUrl: import.meta.env.VITE_API_URL || '',
         prepareHeaders: (headers) => {
             const token = TokenStorageService.getKey('authToken');
             if (token) {

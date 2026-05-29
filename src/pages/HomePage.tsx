@@ -14,14 +14,10 @@ const HomePage = () => {
             navigate('/profile');
             return;
         }else{
-            window.location.href = 'http://localhost:3000/auth/github';
+            window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
             return;
         }
     }
-
-    useEffect(() => {
-        console.log(user)
-    }, [user])
 
     return (
         <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-black flex items-center justify-center">
