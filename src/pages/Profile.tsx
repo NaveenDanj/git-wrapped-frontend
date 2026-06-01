@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import type { Wrapped } from '../types/wrapped-type';
 import { useGetWrappedQuery, useGenerateWrapMutation } from '../services/wrapped-service';
 import WrappedCard from '../components/WrappedCard';
+import { useDispatch } from 'react-redux';
+import { setUserWrapped } from '../store/wrapped/wrappedSlice';
 
 
 const Profile = () => {
+    const dispatch = useDispatch();
     const [wrapped, setWrapped] = useState<Wrapped[]>([]);
     const { data, error, isLoading: isGetWrappedLoading } = useGetWrappedQuery();
     const [generateWrap, { isLoading: isGenerateWrapLoading }] = useGenerateWrapMutation();
@@ -16,6 +19,8 @@ const Profile = () => {
     useEffect(() => {
         if (data) {
             setWrapped(data);
+            // dispatch({ type: 'wrapped/setUserWrapped', payload: data });
+            dispatch(setUserWrapped(data))
         }
     }, [data]);
 
@@ -45,7 +50,7 @@ const Profile = () => {
                     </p>
                 </div>
 
-                <div className="flex justify-center mb-12">
+                <div className="flex justify-center mb-12 gap-5">
                     <button
                         onClick={handleGenerateWrap}
                         disabled={isGetWrappedLoading}
@@ -61,6 +66,12 @@ const Profile = () => {
                                 Generate Wrap
                             </>
                         )}
+                    </button>
+
+                    <button
+                        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        Feed
                     </button>
                 </div>
 

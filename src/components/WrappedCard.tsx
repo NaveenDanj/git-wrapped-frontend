@@ -1,8 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useDeleteWrappedMutation } from "../services/wrapped-service";
 import type { Wrapped } from "../types/wrapped-type";
 
 const WrappedCard = ({item} : {item: Wrapped}) => {
-
+    const navigate = useNavigate();
     const [deleteWrapped, { isLoading: isDeleteWrappedLoading }] = useDeleteWrappedMutation();
 
     const handleDeleteWrap = async (wrappedId: string) => {
@@ -12,6 +13,10 @@ const WrappedCard = ({item} : {item: Wrapped}) => {
         }catch (err) {
             console.error('Failed to delete wrap:', err);
         }
+    }
+
+    const handleClick = () => {
+        navigate(`/story?wrappedId=${item.id}`);
     }
 
     return (
@@ -33,6 +38,11 @@ const WrappedCard = ({item} : {item: Wrapped}) => {
             <button onClick={() => handleDeleteWrap(item.id)} className='bg-red-600 hover:bg-red-700 mt-3 text-white py-1 px-1 rounded-lg transition-colors duration-300'>
                 Delete
             </button>
+
+            <button onClick={handleClick} className='bg-blue-600 hover:bg-blue-700 mt-3 ml-2 text-white py-1 px-1 rounded-lg transition-colors duration-300'>
+                View Story
+            </button>
+
         </div>
     )
 }
