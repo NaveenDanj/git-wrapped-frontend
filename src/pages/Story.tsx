@@ -1,32 +1,37 @@
-
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import  type{ RootState} from '../store';
-import type { Wrapped } from '../types/wrapped-type';
 import { SlideGenerator, type StorySlide } from '../services/slide-generator';
 import SlideWindow from '../components/SlideWindow';
+import { useGetWrappedStatusQuery, useGetWrappedQuery } from '../services/wrapped-service';
+import { setUserWrapped } from '../store/wrapped/wrappedSlice';
 
 const StoryPage = () => {
     const [searchParams] = useSearchParams();
     const wrappedId = searchParams.get("wrappedId");
     const [currentSlide, setCurrentSlide] = useState(0);
     const [slides, setSlides] = useState<StorySlide[]>([]);
+    const dispatch = useDispatch();
     const userwrappedList = useSelector( (state:RootState) => state.wrapped.userWrapped);
-    let currentWrapped: Wrapped | null = null;
+    
+    const currentWrapped = wrappedId ? userwrappedList.find(wrap => wrap.id === wrappedId) || null : null;
+
+    const { data: statusData, isLoading: statusLoading } = useGetWrappedStatusQuery(wrappedId || "", {
+        skip: currentWrapped?.status !== 'pending',
+        pollingInterval: 1000,
+    });
+
+    const { data: wrappedData, refetch: refetchWrapped } = useGetWrappedQuery();
 
     useEffect(() => {
-        if (!wrappedId) {
+        if (!wrappedId || !currentWrapped || !currentWrapped.data) {
             return;
         }
-        currentWrapped = userwrappedList.find(wrap => wrap.id === wrappedId) || null;
-        if (currentWrapped && currentWrapped.data) {
-            const data = currentWrapped.data;
-            const newSlides = SlideGenerator.generateSlides(currentWrapped.year, data);
-            setSlides(newSlides);
-        }
-
-    }, [wrappedId, userwrappedList])
+        const data = currentWrapped.data;
+        const newSlides = SlideGenerator.generateSlides(currentWrapped.year, data);
+        setSlides(newSlides);
+    }, [wrappedId, currentWrapped])
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
@@ -41,6 +46,30 @@ const StoryPage = () => {
         return () => window.removeEventListener('keydown', handleKeyPress);
     }, [currentSlide, slides]);
 
+
+    useEffect(() => {
+        if (statusData && statusData.progress >= 100 && currentWrapped && currentWrapped.status === 'pending') {
+            const data = currentWrapped.data;
+            const newSlides = SlideGenerator.generateSlides(currentWrapped.year, data);
+            setSlides(newSlides);
+        }
+
+    }, [statusData])
+
+
+    useEffect(() => {
+        if (statusData && statusData.progress >= 100 && currentWrapped?.status === 'pending') {
+            refetchWrapped();
+        }
+    }, [statusData?.progress]);
+
+    useEffect(() => {
+        if (wrappedData && wrappedData.length > 0) {
+            dispatch(setUserWrapped(wrappedData));
+        }
+    }, [wrappedData, dispatch]);
+
+
     const nextSlide = () => {
         setCurrentSlide((prev) =>
             prev === slides.length - 1 ? prev : prev + 1
@@ -54,6 +83,17 @@ const StoryPage = () => {
     return (
         <div className="relative w-full h-screen overflow-hidden bg-black">
             
+            { (statusLoading || !statusData || statusData.progress < 100 ) && currentWrapped?.status === 'pending' && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center bg-black">
+                    <div className="text-center">
+                        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                        <p className="text-white text-xl">Generating your wrap...</p>
+                    </div>
+                </div>
+            )}
+
+            {slides.length > 0 && (
+                <>
             <div className="absolute top-0 left-0 right-0 z-20 flex gap-1 p-3">
                 {slides.map((_, idx) => (
                     <div
@@ -104,6 +144,8 @@ const StoryPage = () => {
             <div className="absolute top-12 right-6 text-white/70 text-sm backdrop-blur px-4 py-2 rounded-full">
                 {currentSlide + 1} / {slides.length}
             </div>
+                </>
+            )}
         </div>
     );
 };

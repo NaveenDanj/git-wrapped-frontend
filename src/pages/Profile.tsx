@@ -11,17 +11,12 @@ const Profile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [wrapped, setWrapped] = useState<Wrapped[]>([]);
-    const { data, error, isLoading: isGetWrappedLoading } = useGetWrappedQuery();
+    const { data, isLoading: isGetWrappedLoading } = useGetWrappedQuery();
     const [generateWrap, { isLoading: isGenerateWrapLoading }] = useGenerateWrapMutation();
-
-    if (error) {
-        return <p>Failed to load your GitHub Wrapped. Please try again later.</p>;
-    }
 
     useEffect(() => {
         if (data) {
             setWrapped(data);
-            // dispatch({ type: 'wrapped/setUserWrapped', payload: data });
             dispatch(setUserWrapped(data))
         }
     }, [data]);

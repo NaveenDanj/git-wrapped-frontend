@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetCommentsForWrappedQuery } from "../services/comment-service";
 import type { Wrapped } from "../types/wrapped-type";
 import { useUser } from "../hooks/useUser";
 import CommentSection from "./CommentSection";
@@ -13,10 +12,6 @@ const FeedCard = ({ wrap }: FeedCardProps) => {
     const navigate = useNavigate();
     const { user } = useUser();
     const [showComments, setShowComments] = useState(false);
-    
-    const { data: comments = [] } = useGetCommentsForWrappedQuery(wrap.id, {
-        skip: !showComments,
-    });
 
     const handleViewStory = () => {
         navigate(`/story?wrappedId=${wrap.id}`);
@@ -42,15 +37,6 @@ const FeedCard = ({ wrap }: FeedCardProps) => {
                         <p className="text-slate-400 text-sm">{formatDate(wrap.createdAt)}</p>
                     </div>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    wrap.status === 'completed' 
-                        ? 'bg-green-500/20 text-green-400' 
-                        : wrap.status === 'pending'
-                        ? 'bg-yellow-500/20 text-yellow-400'
-                        : 'bg-red-500/20 text-red-400'
-                }`}>
-                    {wrap.status}
-                </span>
             </div>
 
             <div className="mb-4">
@@ -71,7 +57,6 @@ const FeedCard = ({ wrap }: FeedCardProps) => {
                 </div>
             </div>
 
-            {/* Action buttons */}
             <div className="flex gap-2 mb-4">
                 <button
                     onClick={handleViewStory}
@@ -83,7 +68,7 @@ const FeedCard = ({ wrap }: FeedCardProps) => {
                     onClick={() => setShowComments(!showComments)}
                     className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors duration-300 font-medium"
                 >
-                    {showComments ? "Hide Comments" : `Comments (${comments.length})`}
+                    {showComments ? "Hide Comments" : `Comments`}
                 </button>
             </div>
 

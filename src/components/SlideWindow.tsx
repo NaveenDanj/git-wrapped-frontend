@@ -2,6 +2,7 @@ import type { StorySlide } from "../services/slide-generator"
 
 
 const SlideWindow = ({slide, idx, currentSlide}: {slide: StorySlide, idx: number, currentSlide: number }) => {
+
     return (
         <div
             key={slide.id}

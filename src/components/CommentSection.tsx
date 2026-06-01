@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAddCommentMutation, useGetCommentsForWrappedQuery, useDeleteCommentMutation } from "../services/comment-service";
+import { useAddCommentMutation, useGetCommentsForWrappedQuery } from "../services/comment-service";
 import type { Wrapped } from "../types/wrapped-type";
 import type { UserState } from "../types/user-type";
 import CommentList from "./CommentList";
@@ -30,7 +30,6 @@ const CommentSection = ({ wrap, user }: CommentSectionProps) => {
 
     return (
         <div className="border-t border-slate-700 pt-4">
-            {/* Add comment form */}
             {user && (
                 <div className="mb-4">
                     <div className="flex gap-2">
@@ -53,7 +52,6 @@ const CommentSection = ({ wrap, user }: CommentSectionProps) => {
                 </div>
             )}
 
-            {/* Comments list */}
             <CommentList 
                 comments={comments} 
                 wrap={wrap} 
