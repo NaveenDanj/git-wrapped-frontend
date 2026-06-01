@@ -5,6 +5,7 @@ import LoginCallback from "../pages/LoginCallback";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Profile from "../pages/Profile";
 import StoryPage from "../pages/Story";
+import FeedPage from "../pages/Feed";
 
 const router = createBrowserRouter([
     {
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
             {
                 path: "/story",
                 element: createElement(StoryPage),
-            }
+            },
+            {
+                path: "/feed",
+                element: createElement(FeedPage),
+            },
         ]
     }
 ]);

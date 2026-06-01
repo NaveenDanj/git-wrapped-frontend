@@ -4,10 +4,12 @@ import { useGetWrappedQuery, useGenerateWrapMutation } from '../services/wrapped
 import WrappedCard from '../components/WrappedCard';
 import { useDispatch } from 'react-redux';
 import { setUserWrapped } from '../store/wrapped/wrappedSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const Profile = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [wrapped, setWrapped] = useState<Wrapped[]>([]);
     const { data, error, isLoading: isGetWrappedLoading } = useGetWrappedQuery();
     const [generateWrap, { isLoading: isGenerateWrapLoading }] = useGenerateWrapMutation();
@@ -69,6 +71,7 @@ const Profile = () => {
                     </button>
 
                     <button
+                        onClick={() => navigate('/feed')}
                         className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                         Feed

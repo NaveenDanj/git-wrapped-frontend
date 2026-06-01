@@ -1,7 +1,10 @@
+import type { UserState } from "./user-type";
+
 export interface Wrapped {
     id: string;
     githubUsername: string;
     userId: number;
+    user: UserState;
     title: string;
     type: 'yearly' | 'monthly' | 'weekly' | 'daily';
     status: 'pending' | 'completed' | 'failed';

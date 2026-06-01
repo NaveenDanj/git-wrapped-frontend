@@ -1,10 +1,9 @@
 
-import { useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-    const { isError, isLoading, user } = useUser();
+    const { isLoading, user } = useUser();
     const navigate = useNavigate();
 
     const login = () => {
@@ -28,7 +27,7 @@ const HomePage = () => {
                         GitHub Wrapped
                     </h1>
                     <p className="text-xl text-slate-400">
-                        Discover your GitHub story for 2025
+                        Discover your GitHub story for { new Date().getFullYear() }
                     </p>
                 </div>
 

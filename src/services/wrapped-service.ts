@@ -10,6 +10,11 @@ const wrappedApi = baseApi.injectEndpoints({
             providesTags: ['Wrapped'],
         }),
 
+        getAllWraps: builder.query<Wrapped[], void>({
+            query: () => '/wrapped/all-wrapped',
+            providesTags: ['Wrapped'],
+        }),
+
         getWrappedStatus: builder.query<{ progress: number, attemptsMade: number }, string>({
             query: (wrappedId) => `/wrapped/get-status/${wrappedId}`,
             providesTags: ['Wrapped'],
@@ -35,5 +40,5 @@ const wrappedApi = baseApi.injectEndpoints({
 
 });
 
-export const { useGetWrappedQuery, useGetWrappedStatusQuery, useDeleteWrappedMutation, useGenerateWrapMutation } = wrappedApi;
+export const { useGetWrappedQuery, useGetAllWrapsQuery, useGetWrappedStatusQuery, useDeleteWrappedMutation, useGenerateWrapMutation } = wrappedApi;
 

@@ -5,12 +5,13 @@ export const commentApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
 
         getCommentsForWrapped: builder.query<Comment[], string>({
-            query: (wrappedId) => `/comments/${wrappedId}`
+            query: (wrappedId) => `/comment/${wrappedId}`,
+            providesTags: ['Comments'],
         }),
 
         addComment: builder.mutation<Comment, { wrappedId: string; content: string }>({
             query: ({ wrappedId, content }) => ({
-                url: `/comments/create`,
+                url: `/comment/create`,
                 method: 'POST',
                 body: { wrappedId, content },
             }),
@@ -19,7 +20,7 @@ export const commentApi = baseApi.injectEndpoints({
 
         deleteComment: builder.mutation<void, string>({
             query: (commentId) => ({
-                url: `/comments/${commentId}`,
+                url: `/comment/${commentId}`,
                 method: 'DELETE'
             }),
             invalidatesTags: ['Comments']
@@ -27,3 +28,5 @@ export const commentApi = baseApi.injectEndpoints({
 
     })
 });
+
+export const { useGetCommentsForWrappedQuery, useAddCommentMutation, useDeleteCommentMutation } = commentApi;
