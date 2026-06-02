@@ -24,9 +24,18 @@ export const commentApi = baseApi.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags: ['Comments']
+        }),
+
+        editComment: builder.mutation<Comment, { commentId: string; content: string }>({
+            query: ({ commentId, content }) => ({
+                url: `/comment/${commentId}`,
+                method: 'PATCH',
+                body: { content },
+            }),
+            invalidatesTags: ['Comments'],
         })
 
     })
 });
 
-export const { useGetCommentsForWrappedQuery, useAddCommentMutation, useDeleteCommentMutation } = commentApi;
+export const { useGetCommentsForWrappedQuery, useAddCommentMutation, useDeleteCommentMutation, useEditCommentMutation } = commentApi;
